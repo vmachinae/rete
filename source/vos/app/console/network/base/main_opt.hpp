@@ -16,7 +16,7 @@
 ///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 9/6/2020, 8/3/2021
+///   Date: 9/6/2020, 9/22/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef VOS_APP_CONSOLE_NETWORK_BASE_MAIN_OPT_HPP
 #define VOS_APP_CONSOLE_NETWORK_BASE_MAIN_OPT_HPP
@@ -30,10 +30,13 @@
 #define VOS_NETWORK_MAIN_CONNECT_HOST "localhost"
 #define VOS_NETWORK_MAIN_CONNECT_PORT 80
 
+#define VOS_NETWORK_MAIN_ACCEPT_HOST_OPTARG "[{ * | name | ddd.ddd.ddd.ddd }[:{ 0..2^16-1 }]]"
+#define VOS_NETWORK_MAIN_CONNECT_HOST_OPTARG "[{ name | ddd.ddd.ddd.ddd }[:{ 0..2^16-1 }]]"
+
 #define VOS_NETWORK_MAIN_INFO_OPT "info"
 #define VOS_NETWORK_MAIN_INFO_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_OPTIONAL
 #define VOS_NETWORK_MAIN_INFO_OPTARG_RESULT 0
-#define VOS_NETWORK_MAIN_INFO_OPTARG "[{ name | ddd.ddd.ddd.ddd }]"
+#define VOS_NETWORK_MAIN_INFO_OPTARG VOS_NETWORK_MAIN_CONNECT_HOST_OPTARG
 #define VOS_NETWORK_MAIN_INFO_OPTUSE "Address info"
 #define VOS_NETWORK_MAIN_INFO_OPTVAL_S "i::"
 #define VOS_NETWORK_MAIN_INFO_OPTVAL_C 'i'
