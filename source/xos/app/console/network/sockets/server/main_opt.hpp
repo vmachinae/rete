@@ -24,11 +24,41 @@
 #include "xos/app/console/network/sockets/base/main.hpp"
 #include "xos/app/console/network/server/main_opt.hpp"
 
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPT "accept-one"
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_OPTIONAL
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTARG_RESULT 0
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTARG \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_MAIN_ACCEPT_HOST_OPTARG
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTUSE "Accept one"
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTVAL_S "1::"
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTVAL_C '1'
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTION \
+   {XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPT, \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTARG_REQUIRED, \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTARG_RESULT, \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTVAL_C}, \
+
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPT "accept"
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_OPTIONAL
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTARG_RESULT 0
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTARG \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_MAIN_ACCEPT_HOST_OPTARG
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTUSE "Accept"
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTVAL_S "a::"
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTVAL_C 'a'
+#define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTION \
+   {XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPT, \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTARG_REQUIRED, \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTARG_RESULT, \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTVAL_C}, \
+
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_OPTIONS_CHARS_EXTEND \
-    XOS_NETWORK_SERVER_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTVAL_S \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTVAL_S \
 
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_OPTIONS_OPTIONS_EXTEND \
-    XOS_NETWORK_SERVER_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTION \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTION \
 
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_OPTIONS_CHARS \
     XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_OPTIONS_CHARS_EXTEND \
@@ -358,11 +388,43 @@ protected:
     }
 
     /// ...option...
+    virtual int on_accept_once_option
+    (int optval, const char_t* optarg, const char_t* optname, 
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        err = this->set_accept_once_run(argc, argv, env);
+        return err;
+    }
+    virtual const char_t* accept_once_option_usage(const char_t*& optarg, const struct option* longopt) {
+        const char_t* chars = "";
+        optarg = XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTARG;
+        chars = XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTUSE;
+        return chars;
+    }
+    virtual int on_accept_option
+    (int optval, const char_t* optarg, const char_t* optname, 
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        err = this->set_accept_run(argc, argv, env);
+        return err;
+    }
+    virtual const char_t* accept_option_usage(const char_t*& optarg, const struct option* longopt) {
+        const char_t* chars = "";
+        optarg = XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTARG;
+        chars = XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTUSE;
+        return chars;
+    }
     virtual int on_option
     (int optval, const char_t* optarg, const char_t* optname,
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
         switch(optval) {
+        case XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTVAL_C:
+            err = this->on_accept_once_option(optval, optarg, optname, optind, argc, argv, env);
+            break;
+        case XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTVAL_C:
+            err = this->on_accept_option(optval, optarg, optname, optind, argc, argv, env);
+            break;
         default:
             err = extends::on_option(optval, optarg, optname, optind, argc, argv, env);
         }
@@ -371,6 +433,12 @@ protected:
     virtual const char_t* option_usage(const char_t*& optarg, const struct option* longopt) {
         const char_t* chars = "";
         switch(longopt->val) {
+        case XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTVAL_C:
+            chars = accept_once_option_usage(optarg, longopt);
+            break;
+        case XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_OPTVAL_C:
+            chars = accept_option_usage(optarg, longopt);
+            break;
         default:
             chars = extends::option_usage(optarg, longopt);
             break;

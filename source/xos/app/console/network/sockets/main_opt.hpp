@@ -22,13 +22,13 @@
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_MAIN_OPT_HPP
 
 #include "xos/app/console/network/sockets/server/main.hpp"
-#include "xos/app/console/network/client/main_opt.hpp"
+#include "xos/app/console/network/sockets/client/main.hpp"
 
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_MAIN_OPTIONS_CHARS_EXTEND \
-    XOS_NETWORK_CLIENT_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_CLIENT_MAIN_OPTIONS_CHARS_EXTEND \
 
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_MAIN_OPTIONS_OPTIONS_EXTEND \
-    XOS_NETWORK_CLIENT_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_APP_CONSOLE_NETWORK_SOCKETS_CLIENT_MAIN_OPTIONS_OPTIONS_EXTEND \
 
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_MAIN_OPTIONS_CHARS \
     XOS_APP_CONSOLE_NETWORK_SOCKETS_MAIN_OPTIONS_CHARS_EXTEND \
@@ -49,7 +49,8 @@ namespace sockets {
 
 /// class main_optt
 template 
-<class TExtends = network::client::main_optt<network::sockets::server::maint<> >, 
+<class TExtends = network::sockets::client::maint<network::sockets::client::main_optt
+ <network::client::main_optt<network::sockets::server::maint<> > > >, 
  class TImplements = typename TExtends::implements>
 
 class exported main_optt: virtual public TImplements, public TExtends {
