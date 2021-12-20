@@ -22,7 +22,7 @@
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_OPT_HPP
 
 #include "xos/app/console/network/sockets/base/main.hpp"
-#include "xos/app/console/network/server/main_opt.hpp"
+#include "xos/app/console/network/server/main.hpp"
 
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPT "accept-one"
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_SERVER_MAIN_ACCEPT_ONCE_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_OPTIONAL
@@ -80,7 +80,7 @@ namespace server {
 
 /// class main_optt
 template 
-<class TExtends = network::server::main_optt<network::sockets::base::maint<> >, 
+<class TExtends = network::server::maint<network::server::main_optt<network::sockets::base::maint<> > >, 
  class TImplements = typename TExtends::implements>
 
 class exported main_optt: virtual public TImplements, public TExtends {

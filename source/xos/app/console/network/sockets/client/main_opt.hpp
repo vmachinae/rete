@@ -22,7 +22,7 @@
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_CLIENT_MAIN_OPT_HPP
 
 #include "xos/app/console/network/sockets/base/main.hpp"
-#include "xos/app/console/network/client/main_opt.hpp"
+#include "xos/app/console/network/client/main.hpp"
 
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_CLIENT_MAIN_CONNECT_OPT "connect"
 #define XOS_APP_CONSOLE_NETWORK_SOCKETS_CLIENT_MAIN_CONNECT_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_OPTIONAL
@@ -64,7 +64,7 @@ namespace client {
 
 /// class main_optt
 template 
-<class TExtends = network::client::main_optt<network::sockets::base::maint<> >, 
+<class TExtends = network::client::maint<network::client::main_optt<network::sockets::base::maint<> > >, 
  class TImplements = typename TExtends::implements>
 
 class exported main_optt: virtual public TImplements, public TExtends {
